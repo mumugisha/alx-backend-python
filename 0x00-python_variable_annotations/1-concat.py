@@ -3,12 +3,13 @@
 and returns their concatenation.
 """
 
+
 def concat(str1: str, str2: str) -> str:
     """
     Arguments:
     - str1: The first string
     - str2: The second string
-    
+
     Returns:
     A concatenated string (str1 + str2)
     """
