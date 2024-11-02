@@ -6,7 +6,13 @@ Unit tests for GithubOrgClient class.
 import unittest
 from typing import Dict
 from parameterized import parameterized, parameterized_class
-from unittest.mock import patch, MagicMock, PropertyMock
+from unittest.mock import (
+    MagicMock,
+    Mock,
+    PropertyMock,
+    patch,
+)
+
 from client import GithubOrgClient
 from requests import HTTPError
 
