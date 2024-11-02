@@ -1,34 +1,48 @@
 #!/usr/bin/env python3
-""" Unittest module """
+"""
+Unit tests for the GithubOrgClient class
+"""
 
 import unittest
-from unittest.mock import patch, Mock, PropertyMock
+from typing import Dict
 from parameterized import parameterized
-
+from unittest.mock import patch, MagicMock, PropertyMock
 from client import GithubOrgClient
+from requests import HTTPError
 
 
 class TestGithubOrgClient(unittest.TestCase):
-    """ Class for testing GithubOrgClient """
+    """Testing GithubOrgClient class"""
 
     @parameterized.expand([
-        ("google"),
-        ("abc"),
+        ("google", {'login': "google"}),
+        ("abc", {'login': "abc"}),
     ])
-    @patch('client.get_json')
-    def test_org(self, org_name, mock_json):
-        """ Test method returns correct output """
-        endpoint = 'https://api.github.com/orgs/{}'.format(org_name)
-        spec = GithubOrgClient(data)
-        spec.org()
-        mock_json.assert_called_once_with(endpoint)
+    @patch("client.get_json")
+    def test_org(
+        self, org: str, resp: Dict, mocked_function: MagicMock
+    ) -> None:
+        """
+        Test the org method for GithubOrgClient
+        """
+        mocked_function.return_value = resp
+        gith_org_client = GithubOrgClient(org)
+        self.assertEqual(gith_org_client.org(), resp)
+        mocked_function.assert_called_once_with(
+            "https://api.github.com/orgs/{}".format(org)
+        )
 
-    @parameterized.expand([
-        ("random-url", {'repos_url': 'http://some_url.com'})
-    ])
-    def test_public_repos_url(self, name, result):
-        """ Test method returns correct output """
-        with patch('client.GithubOrgClient.org',
-                   PropertyMock(return_value=result)):
-            response = GithubOrgClient(name)._public_repos_url
-            self.assertEqual(response, result.get('repos_url'))
+    @patch("client.GithubOrgClient.org", new_callable=PropertyMock)
+    def test_public_repos_url(self, mocked_org: PropertyMock) -> None:
+        """Test public repos URL function property"""
+        mocked_org.return_value = {
+            'repos_url': "https://api.github.com/users/google/repos"
+        }
+        self.assertEqual(
+            GithubOrgClient("google")._public_repos_url,
+            "https://api.github.com/users/google/repos"
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()
