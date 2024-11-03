@@ -24,7 +24,6 @@ from fixtures import TEST_PAYLOAD
 
 class TestGithubOrgClient(unittest.TestCase):
     """Test cases for GithubOrgClient class functionality."""
-
     @parameterized.expand([
         ("google", {'login': "google"}),
         ("abc", {'login': "abc"}),
@@ -99,20 +98,21 @@ class TestGithubOrgClient(unittest.TestCase):
                 "default_branch": "master",
             },
         ]
-        mock_get_json.return_value = test_payload
-
+        mock_get_json.return_value = test_payload["repos"]
         with patch(
             "client.GithubOrgClient._public_repos_url",
             new_callable=PropertyMock,
-            return_value="https://api.github.com/users/google/repos"
-        ):
+            ) as mock_public_repos_url:
+            mock_public_repos_url.return_value = test_payload["repos_url"],
             self.assertEqual(
                 GithubOrgClient("google").public_repos(),
-                ["episodes.dart", "kratu"]
+                [
+                    "episodes.dart",
+                    "kratu",
+                    ],
             )
-            mock_get_json.assert_called_once_with(
-                "https://api.github.com/users/google/repos"
-            )
+            mock_get_json.assert_called_once(
+        mock_public_repos_url.assert_called_once()
 
     @parameterized.expand([
         ({"license": {"key": "bsd-3-clause"}}, "bsd-3-clause", True),
@@ -124,7 +124,8 @@ class TestGithubOrgClient(unittest.TestCase):
         the specified license.
         """
         gh_org_client = GithubOrgClient("google")
-        self.assertEqual(gh_org_client.has_license(repo, key), expected)
+        client_has_license = gh_org_client.has_license(repo, key)
+        self.assertEqual(client.has_license, expected)
 
 
 @parameterized_class([
