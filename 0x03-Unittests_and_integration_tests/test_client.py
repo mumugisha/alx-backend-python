@@ -12,25 +12,24 @@ from unittest.mock import (
     Mock,
     PropertyMock,
     patch,
-    )
+)
 from parameterized import parameterized, parameterized_class
 from requests import HTTPError
 
 from client import (
     GithubOrgClient
-    )
+)
 from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
     """Test cases for GithubOrgClient class functionality."""
+
     @parameterized.expand([
         ("google", {'login': "google"}),
         ("abc", {'login': "abc"}),
     ])
-    @patch(
-        "client.get_json",
-    )
+    @patch("client.get_json")
     def test_org(self, org: str, resp: Dict, mocked_fxn: MagicMock) -> None:
         """
         Test that GithubOrgClient.org() returns the expected value
@@ -69,27 +68,27 @@ class TestGithubOrgClient(unittest.TestCase):
         test_payload = [
             {
                 "id": 7697149,
-                "name": "episodes.dart"
-                "private" False,
+                "name": "episodes.dart",
+                "private": False,
                 "owner": {
                     "login": "google",
                     "id": 1342004,
-            },
-            "fork": False,
-            "url": "https://api.github.com/repos/google/episodes.dart",
-            "created_at": "2013-01-19T00:31:37Z",
-            "updated_at": "2019-09-23T11:53:58Z",
-            "has_issues": True,
-            "forks": 22,
-            "default_branch": "master",
+                },
+                "fork": False,
+                "url": "https://api.github.com/repos/google/episodes.dart",
+                "created_at": "2013-01-19T00:31:37Z",
+                "updated_at": "2019-09-23T11:53:58Z",
+                "has_issues": True,
+                "forks": 22,
+                "default_branch": "master",
             },
             {
                 "id": 8566972,
                 "name": "kratu",
                 "private": False,
                 "owner": {
-                     "login": "google",
-                     "id": 1342004,
+                    "login": "google",
+                    "id": 1342004,
                 },
                 "fork": False,
                 "url": "https://api.github.com/repos/google/kratu",
@@ -98,9 +97,8 @@ class TestGithubOrgClient(unittest.TestCase):
                 "has_issues": True,
                 "forks": 22,
                 "default_branch": "master",
-                },
-            ]
-        }
+            },
+        ]
         mock_get_json.return_value = test_payload
 
         with patch(
