@@ -8,7 +8,10 @@ and license verification.
 import unittest
 from typing import Dict
 from unittest.mock import (
-    MagicMock, Mock, PropertyMock, patch
+    MagicMock,
+    Mock,
+    PropertyMock,
+    patch,
     )
 from parameterized import parameterized, parameterized_class
 from requests import HTTPError
