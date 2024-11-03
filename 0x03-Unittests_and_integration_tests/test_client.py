@@ -26,7 +26,9 @@ class TestGithubOrgClient(unittest.TestCase):
         ("google", {'login': "google"}),
         ("abc", {'login': "abc"}),
     ])
-    @patch("client.get_json")
+    @patch(
+        "client.get_json",
+    )
     def test_org(self, org: str, resp: Dict, mocked_fxn: MagicMock) -> None:
         """
         Test that GithubOrgClient.org() returns the expected value
