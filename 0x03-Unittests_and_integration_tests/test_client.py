@@ -31,7 +31,6 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_org(self, org: str, resp: Dict, mocked_fxn: MagicMock) -> None:
         """
         Test that GithubOrgClient.org() returns the expected value
-        based on the mocked API response.
         """
         mocked_fxn.return_value = resp
         gh_org_client = GithubOrgClient(org)
